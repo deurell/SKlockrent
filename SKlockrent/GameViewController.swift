@@ -10,12 +10,16 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
-
+    
+    var hourNode: SCNNode?
+    var minuteNode: SCNNode?
+    var isAnimating:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene()
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -39,11 +43,29 @@ class GameViewController: UIViewController {
         ambientLightNode.light!.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
         
-        // retrieve the ship node
-        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
+        let clockNode = SCNNode()
+        let plane = SCNPlane(width: 9, height: 9)
+        clockNode.geometry = plane
+        clockNode.position = SCNVector3(x:0, y:0, z:5)
+        plane.firstMaterial?.diffuse.contents = UIImage(named: "clock")
+        scene.rootNode.addChildNode(clockNode)
         
-        // animate the 3d object
-        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+        hourNode = SCNNode()
+        let hourPlane = SCNPlane(width: 0.5, height: 2)
+        hourNode!.geometry = hourPlane
+        hourNode!.position = SCNVector3(x:0, y:0, z:5.2)
+        hourNode!.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
+        hourPlane.firstMaterial?.diffuse.contents = UIImage(named: "hourhand")
+        scene.rootNode.addChildNode(hourNode!)
+        
+        minuteNode = SCNNode()
+        let minutePlane = SCNPlane(width: 0.5, height: 2.8)
+        minuteNode!.geometry = minutePlane
+        minuteNode!.position = SCNVector3(x:0, y:0, z:5.1)
+        minuteNode!.pivot = SCNMatrix4MakeTranslation(0, -1.1, 0)
+        minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
+        scene.rootNode.addChildNode(minuteNode!)
+        
         
         // retrieve the SCNView
         let scnView = self.view as! SCNView
@@ -51,14 +73,11 @@ class GameViewController: UIViewController {
         // set the scene to the view
         scnView.scene = scene
         
-        // allows the user to manipulate the camera
         scnView.allowsCameraControl = true
-        
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+        //scnView.showsStatistics = true
         
         // configure the view
-        scnView.backgroundColor = UIColor.black
+        scnView.backgroundColor = UIColor.white
         
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
@@ -74,30 +93,16 @@ class GameViewController: UIViewController {
         let p = gestureRecognize.location(in: scnView)
         let hitResults = scnView.hitTest(p, options: [:])
         // check that we clicked on at least one object
-        if hitResults.count > 0 {
-            // retrieved the first clicked object
-            let result = hitResults[0]
-            
-            // get its material
-            let material = result.node.geometry!.firstMaterial!
-            
-            // highlight it
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
-            
-            // on completion - unhighlight
-            SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                
-                material.emission.contents = UIColor.black
-                
-                SCNTransaction.commit()
-            }
-            
-            material.emission.contents = UIColor.red
-            
-            SCNTransaction.commit()
+        if hitResults.count > 0 && !isAnimating{
+            isAnimating = true
+            minuteNode!.runAction(SCNAction.rotateTo(x: 0, y: 0, z: CGFloat(Float.pi*2), duration: 1.5), completionHandler: {
+                self.minuteNode?.simdEulerAngles = [0,0,0]
+            })
+            hourNode!.runAction(SCNAction.rotateTo(x: 0, y: 0, z: CGFloat(-Float.pi*2), duration: 1.5), completionHandler: {
+                self.hourNode?.simdEulerAngles = [0,0,0]
+                self.isAnimating = false
+            })
+
         }
     }
     
@@ -116,5 +121,5 @@ class GameViewController: UIViewController {
             return .all
         }
     }
-
+    
 }
