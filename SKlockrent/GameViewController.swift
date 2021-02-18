@@ -119,11 +119,13 @@ class GameViewController: UIViewController {
           self.lastDragWorldPosition = SCNVector3(0,0,0);
         }
       }
-      if (node.name == "clock" && draggedNode == nil) {
+      if (node.name == "clock" && draggedNode == nil && !isAnimating) {
         isAnimating = true
-        let rotate = SCNAction.rotateTo(x: CGFloat(-Float.pi/4), y: 0, z: 0, duration: 0.5, usesShortestUnitArc: false)
-        rotate.timingMode = SCNActionTimingMode.easeInEaseOut
-        node.runAction(SCNAction.sequence([rotate, rotate.reversed()]),completionHandler: {
+        let rotate = SCNAction.rotateTo(x: CGFloat(-Float.pi/4), y: 0, z: 0, duration: 1.0, usesShortestUnitArc: true)
+        rotate.timingMode = .easeInEaseOut
+        let rotate2 = SCNAction.rotateTo(x: 0, y: 0, z: 0, duration: 1.0, usesShortestUnitArc: true)
+        rotate.timingMode = .easeInEaseOut
+        node.runAction(SCNAction.sequence([rotate, rotate2]),completionHandler: {
           node.simdRotation = [0,0,0,0]
           self.isAnimating = false
         })
