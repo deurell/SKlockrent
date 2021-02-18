@@ -11,13 +11,14 @@ import SceneKit
 
 class GameViewController: UIViewController {
     
-    var hourNode: SCNNode?
-    var minuteNode: SCNNode?
+    var hourNode:SCNNode?
+    var minuteNode:SCNNode?
     var isAnimating:Bool = false
     var isPanning:Bool = false
     var lastPanWorldLocation:SCNVector3 = SCNVector3(0,0,0)
     var screenSpaceViewZ:CGFloat = 0
     var currentlyPannedNode: SCNNode?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,11 +74,13 @@ class GameViewController: UIViewController {
         scnView.allowsCameraControl = true
         scnView.backgroundColor = UIColor.white
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPressGesture.allowableMovement = 1000
+        longPressGesture.minimumPressDuration = 0
+        scnView.addGestureRecognizer(longPressGesture)
         
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        scnView.addGestureRecognizer(panGesture)
+        //let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        //scnView.addGestureRecognizer(panGesture)
     }
     
     @objc
@@ -104,32 +107,51 @@ class GameViewController: UIViewController {
         }
     }
     
+    var isDragging:Bool = false
+    var draggedNode:SCNNode?
+    var lastDragWorldPosition:SCNVector3 = SCNVector3()
+    
     @objc
-    func handleTap(_ gestureRecognize: UITapGestureRecognizer) {
+    func handleLongPress(_ longPressGesture: UILongPressGestureRecognizer) {
         guard let scnView = self.view as? SCNView else { return }
-        let screenspaceTapLocation = gestureRecognize.location(in: scnView)
+        let screenspaceTapLocation = longPressGesture.location(in: scnView)
         let hitResult = scnView.hitTest(screenspaceTapLocation, options: [SCNHitTestOption.firstFoundOnly : true])
         
         if let hit = hitResult.first {
             let node = hit.node
             if (node.name == "hour" || node.name == "minute") {
-                let scaleUp = SCNAction.scale(by: 2.0, duration: 0.5)
-                scaleUp.timingMode = .easeInEaseOut
-                node.runAction(SCNAction.sequence([scaleUp, scaleUp.reversed()]), completionHandler: {
-                    node.simdScale = [1,1,1]
-                })
+                switch longPressGesture.state {
+                case .began:
+                    // we are starting to drag, set up dragging state
+                    draggedNode = node
+                    screenSpaceViewZ = CGFloat(scnView.projectPoint(hit.worldCoordinates).z)
+                    lastDragWorldPosition = hit.worldCoordinates
+                    let scaleUp = SCNAction.scale(by: 1.1, duration: 0.2)
+                    scaleUp.timingMode = .easeInEaseOut
+                    node.runAction(SCNAction.sequence([scaleUp, scaleUp.reversed()]), completionHandler: {
+                        node.simdScale = [1,1,1]
+                    })
+                case .changed:
+                    break
+                default:
+                    // we are ending drag so just reset everything and end drag state
+                    draggedNode = nil
+                    self.lastDragWorldPosition = SCNVector3(0,0,0);
+                    break
+                    
+                }
             }
-            else if (node.name == "clock" && !isAnimating) {
-                isAnimating = true
-                minuteNode!.runAction(SCNAction.rotateTo(x: 0, y: 0, z: CGFloat(Float.pi*2), duration: 1.5), completionHandler: {
-                    self.minuteNode?.simdEulerAngles = [0,0,0]
-                })
-                hourNode!.runAction(SCNAction.rotateTo(x: 0, y: 0, z: CGFloat(-Float.pi*2), duration: 1.5), completionHandler: {
-                    self.hourNode?.simdEulerAngles = [0,0,0]
-                    self.isAnimating = false
-                })
-                
-            }
+        }
+        
+        if let node = draggedNode {
+            // we are dragging so let's continue
+            let worldDragPosition = scnView.unprojectPoint(SCNVector3(screenspaceTapLocation.x, screenspaceTapLocation.y, screenSpaceViewZ))
+            let translate = SCNVector3(
+                worldDragPosition.x - lastDragWorldPosition.x,
+                worldDragPosition.y - lastDragWorldPosition.y,
+                0)
+            node.localTranslate(by: translate)
+            self.lastDragWorldPosition = worldDragPosition
         }
     }
     
