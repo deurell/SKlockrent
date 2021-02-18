@@ -15,6 +15,9 @@ class GameViewController: UIViewController {
     var minuteNode: SCNNode?
     var isAnimating:Bool = false
     var isPanning:Bool = false
+    var lastPanWorldLocation:SCNVector3 = SCNVector3(0,0,0)
+    var screenSpaceViewZ:CGFloat = 0
+    var currentlyPannedNode: SCNNode?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,10 +80,6 @@ class GameViewController: UIViewController {
         scnView.addGestureRecognizer(panGesture)
     }
     
-    var lastPanWorldLocation:SCNVector3 = SCNVector3(0,0,0)
-    var screenSpaceViewZ:CGFloat = 0
-    var node: SCNNode?
-    
     @objc
     func handlePan(_ panGesture: UIPanGestureRecognizer) {
         guard let scnView = self.view as? SCNView else { return }
@@ -88,7 +87,7 @@ class GameViewController: UIViewController {
         switch panGesture.state {
         case .began:
             guard let hitResult = scnView.hitTest(panScreenspaceLocation, options: [SCNHitTestOption.firstFoundOnly : true]).first else { return }
-            node = hitResult.node
+            currentlyPannedNode = hitResult.node
             screenSpaceViewZ = CGFloat(scnView.projectPoint(lastPanWorldLocation).z)
             lastPanWorldLocation = hitResult.worldCoordinates
         case .changed:
@@ -97,18 +96,17 @@ class GameViewController: UIViewController {
                 worldTouchPosition.x - lastPanWorldLocation.x,
                 worldTouchPosition.y - lastPanWorldLocation.y,
                 0)
-            node?.localTranslate(by: translate)
+            currentlyPannedNode?.localTranslate(by: translate)
             self.lastPanWorldLocation = worldTouchPosition
         default:
-            node = nil
+            currentlyPannedNode = nil
             break
         }
     }
     
     @objc
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+    func handleTap(_ gestureRecognize: UITapGestureRecognizer) {
         guard let scnView = self.view as? SCNView else { return }
-        
         let screenspaceTapLocation = gestureRecognize.location(in: scnView)
         let hitResult = scnView.hitTest(screenspaceTapLocation, options: [SCNHitTestOption.firstFoundOnly : true])
         
