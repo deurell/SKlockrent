@@ -18,6 +18,8 @@ class GameViewController: UIViewController {
     var lastPanWorldLocation:SCNVector3 = SCNVector3(0,0,0)
     var screenSpaceViewZ:CGFloat = 0
     var currentlyPannedNode: SCNNode?
+    var draggedNode:SCNNode?
+    var lastDragWorldPosition:SCNVector3 = SCNVector3()
 
     
     override func viewDidLoad() {
@@ -107,10 +109,6 @@ class GameViewController: UIViewController {
         }
     }
     
-    var isDragging:Bool = false
-    var draggedNode:SCNNode?
-    var lastDragWorldPosition:SCNVector3 = SCNVector3()
-    
     @objc
     func handleLongPress(_ longPressGesture: UILongPressGestureRecognizer) {
         guard let scnView = self.view as? SCNView else { return }
@@ -138,11 +136,9 @@ class GameViewController: UIViewController {
                     draggedNode = nil
                     self.lastDragWorldPosition = SCNVector3(0,0,0);
                     break
-                    
                 }
             }
         }
-        
         if let node = draggedNode {
             // we are dragging so let's continue
             let worldDragPosition = scnView.unprojectPoint(SCNVector3(screenspaceTapLocation.x, screenspaceTapLocation.y, screenSpaceViewZ))
