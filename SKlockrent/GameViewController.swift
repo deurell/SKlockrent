@@ -73,42 +73,15 @@ class GameViewController: UIViewController {
         
         let scnView = self.view as! SCNView
         scnView.scene = scene
-        scnView.allowsCameraControl = true
+        scnView.allowsCameraControl = false
         scnView.backgroundColor = UIColor.white
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         longPressGesture.allowableMovement = 1000
         longPressGesture.minimumPressDuration = 0
         scnView.addGestureRecognizer(longPressGesture)
+    }
         
-        //let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        //scnView.addGestureRecognizer(panGesture)
-    }
-    
-    @objc
-    func handlePan(_ panGesture: UIPanGestureRecognizer) {
-        guard let scnView = self.view as? SCNView else { return }
-        let panScreenspaceLocation = panGesture.location(in: scnView)
-        switch panGesture.state {
-        case .began:
-            guard let hitResult = scnView.hitTest(panScreenspaceLocation, options: [SCNHitTestOption.firstFoundOnly : true]).first else { return }
-            currentlyPannedNode = hitResult.node
-            screenSpaceViewZ = CGFloat(scnView.projectPoint(lastPanWorldLocation).z)
-            lastPanWorldLocation = hitResult.worldCoordinates
-        case .changed:
-            let worldTouchPosition = scnView.unprojectPoint(SCNVector3(panScreenspaceLocation.x, panScreenspaceLocation.y, screenSpaceViewZ))
-            let translate = SCNVector3(
-                worldTouchPosition.x - lastPanWorldLocation.x,
-                worldTouchPosition.y - lastPanWorldLocation.y,
-                0)
-            currentlyPannedNode?.localTranslate(by: translate)
-            self.lastPanWorldLocation = worldTouchPosition
-        default:
-            currentlyPannedNode = nil
-            break
-        }
-    }
-    
     @objc
     func handleLongPress(_ longPressGesture: UILongPressGestureRecognizer) {
         guard let scnView = self.view as? SCNView else { return }
