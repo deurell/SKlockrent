@@ -57,19 +57,19 @@ class GameViewController: UIViewController {
     hourNode?.name = "hour"
     let hourPlane = SCNPlane(width: 0.5, height: 2)
     hourNode?.geometry = hourPlane
-    hourNode?.position = SCNVector3(x:0, y:0, z:5.2)
+    hourNode?.position = SCNVector3(x:0, y:0, z:0.2)
     hourNode?.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
     hourPlane.firstMaterial?.diffuse.contents = UIImage(named: "hourhand")
-    scene.rootNode.addChildNode(hourNode!)
+    clockNode.addChildNode(hourNode!)
     
     minuteNode = SCNNode()
     minuteNode?.name = "minute"
     let minutePlane = SCNPlane(width: 0.5, height: 2.8)
     minuteNode?.geometry = minutePlane
-    minuteNode?.position = SCNVector3(x:0, y:0, z:5.1)
+    minuteNode?.position = SCNVector3(x:0, y:0, z:0.1)
     minuteNode?.pivot = SCNMatrix4MakeTranslation(0, -1.1, 0)
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
-    scene.rootNode.addChildNode(minuteNode!)
+    clockNode.addChildNode(minuteNode!)
     
     let scnView = self.view as! SCNView
     scnView.scene = scene
@@ -118,6 +118,16 @@ class GameViewController: UIViewController {
           draggedNode = nil
           self.lastDragWorldPosition = SCNVector3(0,0,0);
         }
+      }
+      if (node.name == "clock" && draggedNode == nil) {
+        isAnimating = true
+        let rotate = SCNAction.rotateTo(x: CGFloat(-Float.pi/4), y: 0, z: 0, duration: 0.5, usesShortestUnitArc: false)
+        rotate.timingMode = SCNActionTimingMode.easeInEaseOut
+        node.runAction(SCNAction.sequence([rotate, rotate.reversed()]),completionHandler: {
+          node.simdRotation = [0,0,0,0]
+          self.isAnimating = false
+        })
+        
       }
     }
     if let node = draggedNode {
