@@ -14,14 +14,8 @@ class GameViewController: UIViewController {
   var hourNode:SCNNode?
   var minuteNode:SCNNode?
   var clockNode:SCNNode?
-  
   var isAnimating:Bool = false
-  var isPanning:Bool = false
-  var lastPanWorldLocation:SCNVector3 = SCNVector3(0,0,0)
-  var screenSpaceViewZ:CGFloat = 0
-  var currentlyPannedNode: SCNNode?
-  var draggedNode:SCNNode?
-  var lastDragWorldPosition:SCNVector3 = SCNVector3()
+  var trackedHandNode:SCNNode?
   static let HAND_SCALE:simd_float3 = [0.4,0.4,1.0]
   
   
@@ -107,7 +101,7 @@ class GameViewController: UIViewController {
         switch longPressGesture.state {
         case .began:
           // we are starting to drag, set up dragging state
-          draggedNode = node
+          trackedHandNode = node
           let scaleUp = SCNAction.scale(by: 1.1, duration: 0.2)
           scaleUp.timingMode = .easeInEaseOut
           node.runAction(SCNAction.sequence([scaleUp, scaleUp.reversed()]), completionHandler: {
@@ -117,10 +111,10 @@ class GameViewController: UIViewController {
           break
         default:
           // we are ending drag so just reset everything and end drag state
-          draggedNode = nil
+          trackedHandNode = nil
         }
       }
-      if (node.name == "clock" && draggedNode == nil && !isAnimating) {
+      if (node.name == "clock" && trackedHandNode == nil && !isAnimating) {
         isAnimating = true
         let translate = SCNAction.moveBy(x: 0, y: 0, z: -20, duration: 0.5)
         translate.timingMode = .easeInEaseOut
@@ -132,12 +126,12 @@ class GameViewController: UIViewController {
         
       }
     }
-    if let node = draggedNode {
+    if let node = trackedHandNode {
       // we are dragging so get the angle and rotate
       let clock = clockNode!.simdWorldPosition + [0,1,0]
       let touch = hitResult.first!.simdWorldCoordinates
       let delta = touch - clock
-      let rad = atan2(delta.x, delta.y)     
+      let rad = atan2(delta.x, delta.y)
       node.eulerAngles = SCNVector3Make(0, 0, -rad);
     }
   }
