@@ -45,9 +45,9 @@ class GameViewController: UIViewController {
     if let modelScene = SCNScene(named: "assets.scnassets/AlarmClock.scn") {
       guard let node = modelScene.rootNode.childNode(withName: "AlarmClock", recursively: true) else { return }
       node.name = "clock"
-      node.position = SCNVector3(x:0, y:0, z:3)
+      node.position = SCNVector3(x:0, y:1.2, z:3)
       node.pivot = SCNMatrix4MakeTranslation(0, 1.1, 0)
-      node.simdScale = [3.0,3.0,3.0]
+      node.simdScale = [3.2,3.2,3.2]
       clockNode = node
       scene.rootNode.addChildNode(node)
     }
@@ -110,11 +110,12 @@ class GameViewController: UIViewController {
       }
       if (node.name == "clock" && trackedHandNode == nil && !isAnimating) {
         isAnimating = true
-        let translate = SCNAction.moveBy(x: 0, y: 0, z: 2, duration: 0.5)
+        let translate = SCNAction.moveBy(x: 0, y: 0, z: -62, duration: 1.0)
+        let rotate = SCNAction.rotateBy(x: CGFloat(-Float.pi*2), y: 0, z: 0, duration: 1.0)
+        let par = SCNAction.group([translate, rotate])
         translate.timingMode = .easeInEaseOut
-	
-        node.runAction(SCNAction.sequence([translate, translate.reversed()]),completionHandler: {
-          node.simdRotation = [0,0,0,0]
+        rotate.timingMode = .easeInEaseOut
+        node.runAction(SCNAction.sequence([par, par.reversed()]),completionHandler: {
           self.isAnimating = false
         })
         
