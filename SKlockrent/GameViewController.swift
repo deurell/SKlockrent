@@ -108,20 +108,16 @@ class GameViewController: UIViewController {
         case .began:
           // we are starting to drag, set up dragging state
           draggedNode = node
-          screenSpaceViewZ = CGFloat(scnView.projectPoint(hit.worldCoordinates).z)
-          lastDragWorldPosition = hit.worldCoordinates
           let scaleUp = SCNAction.scale(by: 1.1, duration: 0.2)
           scaleUp.timingMode = .easeInEaseOut
           node.runAction(SCNAction.sequence([scaleUp, scaleUp.reversed()]), completionHandler: {
             node.simdScale = GameViewController.HAND_SCALE
           })
-          
         case .changed:
           break
         default:
           // we are ending drag so just reset everything and end drag state
           draggedNode = nil
-          self.lastDragWorldPosition = SCNVector3(0,0,0);
         }
       }
       if (node.name == "clock" && draggedNode == nil && !isAnimating) {
@@ -138,16 +134,10 @@ class GameViewController: UIViewController {
     }
     if let node = draggedNode {
       // we are dragging so get the angle and rotate
-      var pos = clockNode!.worldPosition
-      pos.y += 1.1
       let clock = clockNode!.simdWorldPosition + [0,1,0]
       let touch = hitResult.first!.simdWorldCoordinates
       let delta = touch - clock
-      let rad = atan2(delta.x, delta.y)
-      print("touch: \(touch)")
-      print("clock: \(clock)")
-      print("delta: \(delta)")
-     
+      let rad = atan2(delta.x, delta.y)     
       node.eulerAngles = SCNVector3Make(0, 0, -rad);
     }
   }
