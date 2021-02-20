@@ -42,17 +42,16 @@ class GameViewController: UIViewController {
     ambientLightNode.light!.color = UIColor.darkGray
     scene.rootNode.addChildNode(ambientLightNode)
     
-    clockNode = SCNNode()
-    clockNode?.name = "clock"
-    clockNode?.position = SCNVector3(x:0, y:0, z:3)
-    clockNode?.pivot = SCNMatrix4MakeTranslation(0, 1.1, 0)
-    clockNode?.simdScale = [3.0,3.0,3.0]
     if let modelScene = SCNScene(named: "assets.scnassets/AlarmClock.scn") {
-      clockNode?.addChildNode(modelScene.rootNode.childNode(withName: "AlarmClock", recursively: true)!)
+      guard let node = modelScene.rootNode.childNode(withName: "AlarmClock", recursively: true) else { return }
+      node.name = "clock"
+      node.position = SCNVector3(x:0, y:0, z:3)
+      node.pivot = SCNMatrix4MakeTranslation(0, 1.1, 0)
+      node.simdScale = [3.0,3.0,3.0]
+      clockNode = node
+      scene.rootNode.addChildNode(node)
     }
-    if let clock = clockNode {
-      scene.rootNode.addChildNode(clock)
-    }
+    
     hourNode = SCNNode()
     hourNode?.name = "hour"
     let hourPlane = SCNPlane(width: 0.5, height: 2)
@@ -111,7 +110,7 @@ class GameViewController: UIViewController {
       }
       if (node.name == "clock" && trackedHandNode == nil && !isAnimating) {
         isAnimating = true
-        let translate = SCNAction.moveBy(x: 0, y: 0, z: -20, duration: 0.5)
+        let translate = SCNAction.moveBy(x: 0, y: 0, z: 2, duration: 0.5)
         translate.timingMode = .easeInEaseOut
 	
         node.runAction(SCNAction.sequence([translate, translate.reversed()]),completionHandler: {
