@@ -128,8 +128,8 @@ class GameViewController: UIViewController {
     }
     if let node = trackedHandNode {
       // we are dragging so get the angle and rotate
+      guard let touch = hitResult.first?.simdWorldCoordinates else { return }
       let clock = clockNode!.simdWorldPosition + [0,1,0]
-      let touch = hitResult.first!.simdWorldCoordinates
       let delta = touch - clock
       let rad = atan2(delta.x, delta.y)
       node.eulerAngles = SCNVector3Make(0, 0, -rad);
