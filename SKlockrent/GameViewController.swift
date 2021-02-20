@@ -84,11 +84,6 @@ class GameViewController: UIViewController {
     scnView.addGestureRecognizer(longPressGesture)
   }
   
-  
-  var handPosWorld:simd_float3 = [0,0,0]
-  var touchPosWorld:simd_float3 = [0,0,0]
-  var touchHandDist:simd_float3 = [0,0,0]
-  
   @objc
   func handleLongPress(_ longPressGesture: UILongPressGestureRecognizer) {
     guard let scnView = self.view as? SCNView else { return }
