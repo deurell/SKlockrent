@@ -11,6 +11,7 @@
 		7329E9AE25DD2DD000AA2085 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7329E9AD25DD2DD000AA2085 /* GameViewController.swift */; };
 		7329E9B125DD2DD000AA2085 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7329E9AF25DD2DD000AA2085 /* Main.storyboard */; };
 		7329E9B325DD2DD100AA2085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7329E9B225DD2DD100AA2085 /* Assets.xcassets */; };
+		CFBDC65925DFD66B00656C0E /* assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CFBDC65825DFD66B00656C0E /* assets.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		7329E9B025DD2DD000AA2085 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7329E9B225DD2DD100AA2085 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7329E9B425DD2DD100AA2085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CFBDC65825DFD66B00656C0E /* assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = assets.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				7329E9AF25DD2DD000AA2085 /* Main.storyboard */,
 				7329E9B225DD2DD100AA2085 /* Assets.xcassets */,
 				7329E9B425DD2DD100AA2085 /* Info.plist */,
+				CFBDC65825DFD66B00656C0E /* assets.scnassets */,
 			);
 			path = SKlockrent;
 			sourceTree = "<group>";
@@ -119,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7329E9B325DD2DD100AA2085 /* Assets.xcassets in Resources */,
+				CFBDC65925DFD66B00656C0E /* assets.scnassets in Resources */,
 				7329E9B125DD2DD000AA2085 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,7 +275,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 48T775U7Q4;
+				DEVELOPMENT_TEAM = Z9AX7BRZY5;
 				INFOPLIST_FILE = SKlockrent/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -290,7 +294,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 48T775U7Q4;
+				DEVELOPMENT_TEAM = Z9AX7BRZY5;
 				INFOPLIST_FILE = SKlockrent/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
