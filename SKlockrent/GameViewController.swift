@@ -28,7 +28,7 @@ class GameViewController: UIViewController {
     cameraNode.camera = SCNCamera()
     scene.rootNode.addChildNode(cameraNode)
     
-    cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+    cameraNode.position = SCNVector3(x: 0, y: 0, z: 16)
     
     let lightNode = SCNNode()
     lightNode.light = SCNLight()
@@ -45,20 +45,21 @@ class GameViewController: UIViewController {
     if let modelScene = SCNScene(named: "assets.scnassets/AlarmClock.scn") {
       guard let node = modelScene.rootNode.childNode(withName: "AlarmClock", recursively: true) else { return }
       node.name = "clock"
-      node.position = SCNVector3(x:0, y:1.2, z:3)
+      node.position = SCNVector3(x:0, y:1.2, z:1)
       node.pivot = SCNMatrix4MakeTranslation(0, 1.1, 0)
-      node.simdScale = [3.2,3.2,3.2]
+      node.simdScale = [3.0,3.0,3.0]
       clockNode = node
       scene.rootNode.addChildNode(node)
     }
     
     hourNode = SCNNode()
-    hourNode?.name = "hour"
+    guard let node = hourNode else { fatalError() }
+    node.name = "hour"
     let hourPlane = SCNPlane(width: 0.5, height: 2)
-    hourNode?.geometry = hourPlane
-    hourNode?.position = SCNVector3(x:0, y:1.1, z:0.61)
-    hourNode?.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    hourNode?.simdScale = GameViewController.HAND_SCALE
+    node.geometry = hourPlane
+    node.position = SCNVector3(x:0, y:1.1, z:0.61)
+    node.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
+    node.simdScale = GameViewController.HAND_SCALE
     hourPlane.firstMaterial?.diffuse.contents = UIImage(named: "hourhand")
     clockNode?.addChildNode(hourNode!)
     
