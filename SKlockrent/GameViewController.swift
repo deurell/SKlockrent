@@ -11,8 +11,8 @@ import SceneKit
 
 class GameViewController: UIViewController {
   
-  var hourNode:SCNNode?
-  var minuteNode:SCNNode?
+  var hourNode:SCNNode = SCNNode()
+  var minuteNode:SCNNode = SCNNode()
   var clockNode:SCNNode?
   var isAnimating:Bool = false
   var trackedHandNode:SCNNode?
@@ -52,26 +52,23 @@ class GameViewController: UIViewController {
       scene.rootNode.addChildNode(node)
     }
     
-    hourNode = SCNNode()
-    guard let node = hourNode else { fatalError() }
-    node.name = "hour"
+    hourNode.name = "hour"
     let hourPlane = SCNPlane(width: 0.5, height: 2)
-    node.geometry = hourPlane
-    node.position = SCNVector3(x:0, y:1.1, z:0.61)
-    node.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    node.simdScale = GameViewController.HAND_SCALE
+    hourNode.geometry = hourPlane
+    hourNode.position = SCNVector3(x:0, y:1.1, z:0.61)
+    hourNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
+    hourNode.simdScale = GameViewController.HAND_SCALE
     hourPlane.firstMaterial?.diffuse.contents = UIImage(named: "hourhand")
-    clockNode?.addChildNode(hourNode!)
+    clockNode?.addChildNode(hourNode)
     
-    minuteNode = SCNNode()
-    minuteNode?.name = "minute"
+    minuteNode.name = "minute"
     let minutePlane = SCNPlane(width: 0.5, height: 1.8)
-    minuteNode?.geometry = minutePlane
-    minuteNode?.position = SCNVector3(x:0, y:1.1, z:0.6)
-    minuteNode?.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    minuteNode?.simdScale = GameViewController.HAND_SCALE
+    minuteNode.geometry = minutePlane
+    minuteNode.position = SCNVector3(x:0, y:1.1, z:0.6)
+    minuteNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
+    minuteNode.simdScale = GameViewController.HAND_SCALE
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
-    clockNode?.addChildNode(minuteNode!)
+    clockNode?.addChildNode(minuteNode)
     
     let scnView = self.view as! SCNView
     scnView.scene = scene
