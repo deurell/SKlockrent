@@ -18,6 +18,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
   var logoNode:SCNNode = SCNNode()
   var isAnimating:Bool = false
   var trackedHandNode:SCNNode?
+  var startTime:Double = 0
+  var previousUpdate:Double = 0
+  var scrollOffset:Double = 0
+  var logo:SCNText?
+  
   static let HAND_SCALE:simd_float3 = [0.4,0.4,1.0]
   
   
@@ -75,15 +80,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     let logoText = """
       Klockrent tillverkades under tiden Deurell Labs kompilerande C++ kod för andra projekt. Vi tjänar inga pengar på detta, spelet innehåller ingen reklam eller köp och vi kommer aldrig på någ sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...
     """
-    let logo = SCNText(string: logoText, extrusionDepth: 0)
-    logo.font = UIFont(name: "Commodore-64-Rounded", size: 7)
+    logo = SCNText(string: logoText, extrusionDepth: 0)
+    logo?.font = UIFont(name: "Commodore-64-Rounded", size: 7)
     logoNode.geometry = logo
     logoNode.simdScale = [0.2,0.2,0.2]
     logoNode.simdPosition = [-5,-8,-2]
     let vertShader = """
+      uniform float scroll_offset;
       float d = _geometry.position.x;
       _geometry.position.y += (8.0 * sin(-4.0 * u_time + 0.08*d));
-      _geometry.position.x -= (14.0 * u_time);
+      _geometry.position.x -= (14.0 * scroll_offset);
     """
     let fragShader = """
         #pragma body
@@ -92,8 +98,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         float3 b64 = float3(.0, .0, 170.0/255.0);
         _output.color.rgba = float4(mix(b64,lb64,abs(sin(2.0*iTime))), 1.0);
     """
-    logo.shaderModifiers = [.geometry: vertShader ,.fragment: fragShader]
-    
+    logo?.shaderModifiers = [.geometry: vertShader ,.fragment: fragShader]
+    logo?.setValue(0.0, forKey: "scroll_offset")
     scene.rootNode.addChildNode(logoNode)
     
     let scnView = self.view as! SCNView
@@ -159,6 +165,19 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
   }
   
   func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+    if (previousUpdate == 0) {
+      previousUpdate = time
+      startTime = time
+    }
+    
+    let delta = time - previousUpdate
+    previousUpdate = time
+    
+    scrollOffset += delta
+    if (scrollOffset >= 109.0) {
+      scrollOffset = 0
+    }
+    logo?.setValue(scrollOffset, forKey: "scroll_offset")
   }
   
   override var shouldAutorotate: Bool {
