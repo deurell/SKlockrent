@@ -11,6 +11,8 @@
 		7329E9AE25DD2DD000AA2085 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7329E9AD25DD2DD000AA2085 /* GameViewController.swift */; };
 		7329E9B125DD2DD000AA2085 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7329E9AF25DD2DD000AA2085 /* Main.storyboard */; };
 		7329E9B325DD2DD100AA2085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7329E9B225DD2DD100AA2085 /* Assets.xcassets */; };
+		CF58133525FBADDC005B27FF /* frag.shader in Resources */ = {isa = PBXBuildFile; fileRef = CF58133425FBADDC005B27FF /* frag.shader */; };
+		CF58133925FCC72A005B27FF /* Commodore Rounded v1.2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */; };
 		CFBDC65925DFD66B00656C0E /* assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CFBDC65825DFD66B00656C0E /* assets.scnassets */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +23,8 @@
 		7329E9B025DD2DD000AA2085 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7329E9B225DD2DD100AA2085 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7329E9B425DD2DD100AA2085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF58133425FBADDC005B27FF /* frag.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag.shader; sourceTree = "<group>"; };
+		CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Commodore Rounded v1.2.ttf"; sourceTree = "<group>"; };
 		CFBDC65825DFD66B00656C0E /* assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = assets.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -54,6 +58,8 @@
 		7329E9A825DD2DD000AA2085 /* SKlockrent */ = {
 			isa = PBXGroup;
 			children = (
+				CF58133325FBADBB005B27FF /* shaders */,
+				CF58133125FBAAD2005B27FF /* gfx */,
 				7329E9A925DD2DD000AA2085 /* AppDelegate.swift */,
 				7329E9AD25DD2DD000AA2085 /* GameViewController.swift */,
 				7329E9AF25DD2DD000AA2085 /* Main.storyboard */,
@@ -62,6 +68,22 @@
 				CFBDC65825DFD66B00656C0E /* assets.scnassets */,
 			);
 			path = SKlockrent;
+			sourceTree = "<group>";
+		};
+		CF58133125FBAAD2005B27FF /* gfx */ = {
+			isa = PBXGroup;
+			children = (
+				CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */,
+			);
+			path = gfx;
+			sourceTree = "<group>";
+		};
+		CF58133325FBADBB005B27FF /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				CF58133425FBADDC005B27FF /* frag.shader */,
+			);
+			path = shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,8 +144,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				7329E9B325DD2DD100AA2085 /* Assets.xcassets in Resources */,
+				CF58133925FCC72A005B27FF /* Commodore Rounded v1.2.ttf in Resources */,
 				CFBDC65925DFD66B00656C0E /* assets.scnassets in Resources */,
 				7329E9B125DD2DD000AA2085 /* Main.storyboard in Resources */,
+				CF58133525FBADDC005B27FF /* frag.shader in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

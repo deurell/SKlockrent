@@ -8,12 +8,14 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import simd
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SCNSceneRendererDelegate {
   
   var hourNode:SCNNode = SCNNode()
   var minuteNode:SCNNode = SCNNode()
   var clockNode:SCNNode?
+  var logoNode:SCNNode = SCNNode()
   var isAnimating:Bool = false
   var trackedHandNode:SCNNode?
   static let HAND_SCALE:simd_float3 = [0.4,0.4,1.0]
@@ -70,10 +72,36 @@ class GameViewController: UIViewController {
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
     clockNode?.addChildNode(minuteNode)
     
+    let logoText = """
+      Klockrent tillverkades under tiden Deurell Labs kompilerande C++ kod för andra projekt. Vi tjänar inga pengar på detta, spelet innehåller ingen reklam eller köp och vi kommer aldrig på någ sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...
+    """
+    let logo = SCNText(string: logoText, extrusionDepth: 0)
+    logo.font = UIFont(name: "Commodore-64-Rounded", size: 7)
+    logoNode.geometry = logo
+    logoNode.simdScale = [0.2,0.2,0.2]
+    logoNode.simdPosition = [-5,-8,-2]
+    let vertShader = """
+      float d = _geometry.position.x;
+      _geometry.position.y += (8.0 * sin(-4.0 * u_time + 0.08*d));
+      _geometry.position.x -= (14.0 * u_time);
+    """
+    let fragShader = """
+        #pragma body
+        float iTime = scn_frame.time;
+        float3 lb64 = float3(.0, 136.0/255.0, 1.0);
+        float3 b64 = float3(.0, .0, 170.0/255.0);
+        _output.color.rgba = float4(mix(b64,lb64,abs(sin(2.0*iTime))), 1.0);
+    """
+    logo.shaderModifiers = [.geometry: vertShader ,.fragment: fragShader]
+    
+    scene.rootNode.addChildNode(logoNode)
+    
     let scnView = self.view as! SCNView
     scnView.scene = scene
     scnView.allowsCameraControl = false
     scnView.backgroundColor = UIColor.white
+    scnView.delegate = self
+    scnView.isPlaying = true
     
     let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
     longPressGesture.allowableMovement = 1000
@@ -95,8 +123,9 @@ class GameViewController: UIViewController {
           // we are starting to drag, set up dragging state
           trackedHandNode = node
           let scaleUp = SCNAction.scale(by: 1.1, duration: 0.2)
-          scaleUp.timingMode = .easeInEaseOut
-          node.runAction(SCNAction.sequence([scaleUp, scaleUp.reversed()]), completionHandler: {
+          let seq = SCNAction.sequence([scaleUp, scaleUp.reversed()])
+          seq.timingMode = .easeInEaseOut
+          node.runAction(seq, completionHandler: {
             node.simdScale = GameViewController.HAND_SCALE
           })
         case .changed:
@@ -108,15 +137,15 @@ class GameViewController: UIViewController {
       }
       if (node.name == "clock" && trackedHandNode == nil && !isAnimating) {
         isAnimating = true
-        let translate = SCNAction.moveBy(x: 0, y: 0, z: -62, duration: 1.0)
-        let rotate = SCNAction.rotateBy(x: CGFloat(-Float.pi*2), y: 0, z: 0, duration: 1.0)
+        let translate = SCNAction.moveBy(x: 0, y: -20, z: -80, duration: 1.0)
+        let rotate = SCNAction.rotateBy(x: CGFloat(Float.pi/2), y: 0, z: 0, duration: 1.0)
         let par = SCNAction.group([translate, rotate])
-        translate.timingMode = .easeInEaseOut
-        rotate.timingMode = .easeInEaseOut
+        par.timingFunction = { time in
+          return simd_smoothstep(0, 1, time)
+        }
         node.runAction(SCNAction.sequence([par, par.reversed()]),completionHandler: {
           self.isAnimating = false
         })
-        
       }
     }
     if let node = trackedHandNode {
@@ -127,6 +156,9 @@ class GameViewController: UIViewController {
       let rad = atan2(delta.x, delta.y)
       node.eulerAngles = SCNVector3Make(0, 0, -rad);
     }
+  }
+  
+  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
   }
   
   override var shouldAutorotate: Bool {
