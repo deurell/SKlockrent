@@ -78,7 +78,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     clockNode?.addChildNode(minuteNode)
     
     let logoText = """
-      Klockrent tillverkades under tiden Deurell Labs kompilerande C++ kod för andra projekt. Vi tjänar inga pengar på detta, spelet innehåller ingen reklam eller köp och vi kommer aldrig på någ sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...
+      Klockrent tillverkades under tiden Deurell Labs kompilerade C++ kod för andra projekt. Spelet innehåller ingen reklam eller köp och vi kommer aldrig på något sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*
     """
     logo = SCNText(string: logoText, extrusionDepth: 0)
     logo?.font = UIFont(name: "Commodore-64-Rounded", size: 7)
