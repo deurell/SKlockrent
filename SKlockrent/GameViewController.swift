@@ -20,8 +20,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
   var trackedHandNode:SCNNode?
   var startTime:Double = 0
   var previousUpdate:Double = 0
-  var scrollOffset:Double = 0
-  var logo:SCNText?
   var _scroller:Scroller?
   
   static let HAND_SCALE:simd_float3 = [0.4,0.4,1.0]
