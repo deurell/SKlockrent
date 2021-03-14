@@ -13,6 +13,7 @@
 		7329E9B325DD2DD100AA2085 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7329E9B225DD2DD100AA2085 /* Assets.xcassets */; };
 		CF58133525FBADDC005B27FF /* frag.shader in Resources */ = {isa = PBXBuildFile; fileRef = CF58133425FBADDC005B27FF /* frag.shader */; };
 		CF58133925FCC72A005B27FF /* Commodore Rounded v1.2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */; };
+		CF58133C25FDE808005B27FF /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF58133B25FDE808005B27FF /* Scroller.swift */; };
 		CFBDC65925DFD66B00656C0E /* assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CFBDC65825DFD66B00656C0E /* assets.scnassets */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		7329E9B425DD2DD100AA2085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF58133425FBADDC005B27FF /* frag.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag.shader; sourceTree = "<group>"; };
 		CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Commodore Rounded v1.2.ttf"; sourceTree = "<group>"; };
+		CF58133B25FDE808005B27FF /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
 		CFBDC65825DFD66B00656C0E /* assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = assets.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,7 @@
 				CF58133125FBAAD2005B27FF /* gfx */,
 				7329E9A925DD2DD000AA2085 /* AppDelegate.swift */,
 				7329E9AD25DD2DD000AA2085 /* GameViewController.swift */,
+				CF58133B25FDE808005B27FF /* Scroller.swift */,
 				7329E9AF25DD2DD000AA2085 /* Main.storyboard */,
 				7329E9B225DD2DD100AA2085 /* Assets.xcassets */,
 				7329E9B425DD2DD100AA2085 /* Info.plist */,
@@ -158,6 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF58133C25FDE808005B27FF /* Scroller.swift in Sources */,
 				7329E9AE25DD2DD000AA2085 /* GameViewController.swift in Sources */,
 				7329E9AA25DD2DD000AA2085 /* AppDelegate.swift in Sources */,
 			);
