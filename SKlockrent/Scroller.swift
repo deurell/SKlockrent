@@ -9,20 +9,51 @@ import Foundation
 import SceneKit
 import simd
 
+
+protocol TimelineCommand {
+  var isDone:Bool { get }
+  var time:Double { get }
+  func shouldRun(time:Double) -> Bool
+  func execute(delta:Double)
+}
+
+class WrapCommand : TimelineCommand
+{
+  var time: Double
+  let scroller: Scroller
+  var isDone: Bool = false
+  
+  init(time:Double, scroller:Scroller) {
+    self.time = time
+    self.scroller = scroller
+  }
+  
+  func shouldRun(time:Double) -> Bool {
+    return time >= self.time && isDone == false
+  }
+  
+  func execute(delta:Double) {
+    scroller._time = 0
+    self.isDone = true
+  }
+}
+
 class Scroller
 {
+  
+  let wrap_time:Double = 92.0
+  
   let _scene:SCNScene
   let _text:SCNText
   let _scrollNode:SCNNode
-  var _scrollOffset:Double = 0
-  
-  let _scrollText = "Klockrent innehåller ingen reklam eller dolda köp och vi kommer aldrig på något sätt spara/spåra uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*       "
-  
-  let wrap_time:Double = 100.0
-  
-  init(scene: SCNScene, position: simd_float3) {
+  var _time:Double = 0
+
+  var _timelineOffset = 0
+  var _timeline:[TimelineCommand]?
+
+  init(scene: SCNScene, position: simd_float3, scrollText:String) {
     _scene = scene
-    _text = SCNText(string: _scrollText, extrusionDepth: 0)
+    _text = SCNText(string: scrollText, extrusionDepth: 0)
     _text.font = UIFont(name: "Commodore-64-Rounded", size: 7)
     _scrollNode = SCNNode()
     _scrollNode.geometry = _text
@@ -47,10 +78,15 @@ class Scroller
   }
   
   func update(delta:Double) {
-    _scrollOffset += delta
-    if (_scrollOffset >= wrap_time) {
-      _scrollOffset = 0
+    _time += delta
+  
+    if let timeline = _timeline {
+    let currentAction = timeline[_timelineOffset]
+      if (currentAction.shouldRun(time: _time)) {
+        currentAction.execute(delta: delta)
+      }
     }
-    _text.setValue(_scrollOffset, forKey: "scroll_offset")
+    
+    _text.setValue(_time, forKey: "scroll_offset")
   }
 }

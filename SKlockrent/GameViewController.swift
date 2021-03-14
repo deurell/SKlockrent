@@ -74,7 +74,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
     _clockNode?.addChildNode(_minuteNode)
     
-    _scroller = Scroller(scene: scene, position: [0,-8,-2])
+    _scroller = Scroller(scene: scene,
+                         position: [0,-8,-2],
+                         scrollText: "Klockrent innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ")
+    if let scroller = _scroller {
+      scroller._timeline = [
+        WrapCommand(time: 72.0, scroller: scroller)
+      ]
+    }
     
     let scnView = self.view as! SCNView
     scnView.scene = scene
