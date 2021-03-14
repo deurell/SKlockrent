@@ -15,9 +15,7 @@ class Scroller
   let _scrollNode:SCNNode
   var _scrollOffset:Double = 0
   
-  let _scrollText = """
-    Klockrent tillverkades under tiden Deurell Labs kompilerade C++ kod för andra projekt. Spelet innehåller ingen reklam eller köp och vi kommer aldrig på något sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*
-  """
+  let _scrollText = "Klockrent tillverkades under tiden Deurell Labs kompilerade C++ kod för andra projekt. Spelet innehåller ingen reklam eller köp och vi kommer aldrig på något sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*       "
   
   init(scene: SCNScene) {
     _scene = scene
@@ -26,7 +24,7 @@ class Scroller
     _scrollNode = SCNNode()
     _scrollNode.geometry = _text
     _scrollNode.simdScale = [0.2,0.2,0.2]
-    _scrollNode.simdPosition = [-5,-8,-2]
+    _scrollNode.simdPosition = [5.5,-8,-2]
     let vertShader = """
       uniform float scroll_offset;
       float d = _geometry.position.x;
