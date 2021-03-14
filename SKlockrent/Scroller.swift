@@ -30,7 +30,7 @@ class Scroller
       uniform float scroll_offset;
       float d = _geometry.position.x;
       _geometry.position.y += (8.0 * sin(-4.0 * u_time + 0.08*d));
-      _geometry.position.x -= (14.0 * scroll_offset);
+      _geometry.position.x -= (14.0 * scroll_offset - 50);
     """
     let fragShader = """
         #pragma body

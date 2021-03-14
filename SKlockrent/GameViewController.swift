@@ -24,7 +24,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
   
   static let hand_scale:simd_float3 = [0.4,0.4,1.0]
   
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -75,7 +74,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
     _clockNode?.addChildNode(_minuteNode)
     
-    _scroller = Scroller(scene: scene, position: [5.5,-8,-2])
+    _scroller = Scroller(scene: scene, position: [0,-8,-2])
     
     let scnView = self.view as! SCNView
     scnView.scene = scene
