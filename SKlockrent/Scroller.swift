@@ -10,18 +10,11 @@ import SceneKit
 import simd
 
 
-protocol TimelineCommand {
-  var isDone:Bool { get }
-  var time:Double { get }
-  func shouldRun(time:Double) -> Bool
-  func execute(delta:Double)
-}
-
-class WrapCommand : TimelineCommand
-{
-  var time: Double
-  let scroller: Scroller
-  var isDone: Bool = false
+class TimelineCommand {
+  
+  var isDone:Bool = false
+  var time:Double = 0
+  var scroller: Scroller
   
   init(time:Double, scroller:Scroller) {
     self.time = time
@@ -33,21 +26,50 @@ class WrapCommand : TimelineCommand
   }
   
   func execute(delta:Double) {
-    scroller._time = 0
+    fatalError("no execute implementation on command")
+  }
+  
+  func reset() {
+    isDone = false
+  }
+}
+
+class WrapCommand : TimelineCommand
+{
+  override init(time: Double, scroller: Scroller) {
+    super.init(time: time, scroller: scroller)
+  }
+  
+  override func execute(delta:Double) {
+    scroller._scrollOffset = 0
     self.isDone = true
+  }
+}
+
+class SpeedCommand : TimelineCommand
+{
+  var speed:Double
+  
+  init(time: Double, scroller: Scroller, speed:Double) {
+    self.speed = speed
+    super.init(time: time, scroller: scroller)
+  }
+  
+  override func execute(delta: Double) {
+    scroller._speed = speed
+    isDone = true
   }
 }
 
 class Scroller
 {
-  
-  let wrap_time:Double = 92.0
-  
   let _scene:SCNScene
   let _text:SCNText
   let _scrollNode:SCNNode
   var _time:Double = 0
-
+  var _scrollOffset:Double = 0
+  var _speed:Double = 16
+  
   var _timelineOffset = 0
   var _timeline:[TimelineCommand]?
 
@@ -63,7 +85,7 @@ class Scroller
       uniform float scroll_offset;
       float d = _geometry.position.x;
       _geometry.position.y += (8.0 * sin(-4.0 * u_time + 0.08*d));
-      _geometry.position.x -= (14.0 * scroll_offset - 50);
+      _geometry.position.x = _geometry.position.x - scroll_offset + 50;
     """
     let fragShader = """
         #pragma body
@@ -79,14 +101,23 @@ class Scroller
   
   func update(delta:Double) {
     _time += delta
-  
+    _scrollOffset = _scrollOffset + (delta * _speed)
+    
     if let timeline = _timeline {
     let currentAction = timeline[_timelineOffset]
       if (currentAction.shouldRun(time: _time)) {
         currentAction.execute(delta: delta)
+        _timelineOffset+=1
+        if (_timelineOffset > timeline.count-1) {
+          _timelineOffset = 0
+          for command in self._timeline! {
+            command.reset()
+            self._time = 0
+          }
+        }
       }
     }
     
-    _text.setValue(_time, forKey: "scroll_offset")
+    _text.setValue(_scrollOffset, forKey: "scroll_offset")
   }
 }

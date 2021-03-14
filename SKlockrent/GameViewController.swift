@@ -79,7 +79,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
                          scrollText: "Klockrent innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ")
     if let scroller = _scroller {
       scroller._timeline = [
-        WrapCommand(time: 72.0, scroller: scroller)
+        SpeedCommand(time: 0.0, scroller: scroller, speed: 75),
+        SpeedCommand(time: 1.0, scroller: scroller, speed: 0),
+        SpeedCommand(time: 4.0, scroller: scroller, speed: 16),
+        WrapCommand(time: 64.0, scroller: scroller)
       ]
     }
     
