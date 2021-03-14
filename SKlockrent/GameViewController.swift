@@ -12,24 +12,23 @@ import simd
 
 class GameViewController: UIViewController, SCNSceneRendererDelegate {
   
-  var hourNode:SCNNode = SCNNode()
-  var minuteNode:SCNNode = SCNNode()
-  var clockNode:SCNNode?
-  var logoNode:SCNNode = SCNNode()
-  var isAnimating:Bool = false
-  var trackedHandNode:SCNNode?
-  var startTime:Double = 0
-  var previousUpdate:Double = 0
+  var _hourNode:SCNNode = SCNNode()
+  var _minuteNode:SCNNode = SCNNode()
+  var _clockNode:SCNNode?
+  var _isAnimating:Bool = false
+  var _trackedHandNode:SCNNode?
+  var _startTime:Double = 0
+  var _previousUpdate:Double = 0
+  
   var _scroller:Scroller?
   
-  static let HAND_SCALE:simd_float3 = [0.4,0.4,1.0]
+  static let hand_scale:simd_float3 = [0.4,0.4,1.0]
   
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     let scene = SCNScene()
-    
     let cameraNode = SCNNode()
     cameraNode.camera = SCNCamera()
     scene.rootNode.addChildNode(cameraNode)
@@ -54,29 +53,29 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
       node.position = SCNVector3(x:0, y:1.2, z:1)
       node.pivot = SCNMatrix4MakeTranslation(0, 1.1, 0)
       node.simdScale = [3.0,3.0,3.0]
-      clockNode = node
+      _clockNode = node
       scene.rootNode.addChildNode(node)
     }
     
-    hourNode.name = "hour"
+    _hourNode.name = "hour"
     let hourPlane = SCNPlane(width: 0.5, height: 2)
-    hourNode.geometry = hourPlane
-    hourNode.position = SCNVector3(x:0, y:1.1, z:0.61)
-    hourNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    hourNode.simdScale = GameViewController.HAND_SCALE
+    _hourNode.geometry = hourPlane
+    _hourNode.position = SCNVector3(x:0, y:1.1, z:0.61)
+    _hourNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
+    _hourNode.simdScale = GameViewController.hand_scale
     hourPlane.firstMaterial?.diffuse.contents = UIImage(named: "hourhand")
-    clockNode?.addChildNode(hourNode)
+    _clockNode?.addChildNode(_hourNode)
     
-    minuteNode.name = "minute"
+    _minuteNode.name = "minute"
     let minutePlane = SCNPlane(width: 0.5, height: 1.8)
-    minuteNode.geometry = minutePlane
-    minuteNode.position = SCNVector3(x:0, y:1.1, z:0.6)
-    minuteNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    minuteNode.simdScale = GameViewController.HAND_SCALE
+    _minuteNode.geometry = minutePlane
+    _minuteNode.position = SCNVector3(x:0, y:1.1, z:0.6)
+    _minuteNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
+    _minuteNode.simdScale = GameViewController.hand_scale
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
-    clockNode?.addChildNode(minuteNode)
+    _clockNode?.addChildNode(_minuteNode)
     
-    _scroller = Scroller(scene: scene)
+    _scroller = Scroller(scene: scene, position: [5.5,-8,-2])
     
     let scnView = self.view as! SCNView
     scnView.scene = scene
@@ -103,22 +102,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         switch longPressGesture.state {
         case .began:
           // we are starting to drag, set up dragging state
-          trackedHandNode = node
+          _trackedHandNode = node
           let scaleUp = SCNAction.scale(by: 1.1, duration: 0.2)
           let seq = SCNAction.sequence([scaleUp, scaleUp.reversed()])
           seq.timingMode = .easeInEaseOut
           node.runAction(seq, completionHandler: {
-            node.simdScale = GameViewController.HAND_SCALE
+            node.simdScale = GameViewController.hand_scale
           })
         case .changed:
           break
         default:
           // we are ending drag so just reset everything and end drag state
-          trackedHandNode = nil
+          _trackedHandNode = nil
         }
       }
-      if (node.name == "clock" && trackedHandNode == nil && !isAnimating) {
-        isAnimating = true
+      if (node.name == "clock" && _trackedHandNode == nil && !_isAnimating) {
+        _isAnimating = true
         let translate = SCNAction.moveBy(x: 0, y: -20, z: -80, duration: 1.0)
         let rotate = SCNAction.rotateBy(x: CGFloat(Float.pi/2), y: 0, z: 0, duration: 1.0)
         let par = SCNAction.group([translate, rotate])
@@ -126,14 +125,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
           return simd_smoothstep(0, 1, time)
         }
         node.runAction(SCNAction.sequence([par, par.reversed()]),completionHandler: {
-          self.isAnimating = false
+          self._isAnimating = false
         })
       }
     }
-    if let node = trackedHandNode {
+    if let node = _trackedHandNode {
       // we are dragging so get the angle and rotate
       guard let touch = hitResult.first?.simdWorldCoordinates else { return }
-      let clock = clockNode!.simdWorldPosition + [0,1,0]
+      let clock = _clockNode!.simdWorldPosition + [0,1,0]
       let delta = touch - clock
       let rad = atan2(delta.x, delta.y)
       node.eulerAngles = SCNVector3Make(0, 0, -rad);
@@ -141,12 +140,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
   }
   
   func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-    if (previousUpdate == 0) {
-      previousUpdate = time
-      startTime = time
+    if (_previousUpdate == 0) {
+      _previousUpdate = time
+      _startTime = time
     }
-    let delta = time - previousUpdate
-    previousUpdate = time
+    let delta = time - _previousUpdate
+    _previousUpdate = time
     
     _scroller?.update(delta: delta)
   }

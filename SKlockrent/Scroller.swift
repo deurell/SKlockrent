@@ -7,6 +7,7 @@
 
 import Foundation
 import SceneKit
+import simd
 
 class Scroller
 {
@@ -17,14 +18,14 @@ class Scroller
   
   let _scrollText = "Klockrent tillverkades under tiden Deurell Labs kompilerade C++ kod för andra projekt. Spelet innehåller ingen reklam eller köp och vi kommer aldrig på något sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*       "
   
-  init(scene: SCNScene) {
+  init(scene: SCNScene, position: simd_float3) {
     _scene = scene
     _text = SCNText(string: _scrollText, extrusionDepth: 0)
     _text.font = UIFont(name: "Commodore-64-Rounded", size: 7)
     _scrollNode = SCNNode()
     _scrollNode.geometry = _text
     _scrollNode.simdScale = [0.2,0.2,0.2]
-    _scrollNode.simdPosition = [5.5,-8,-2]
+    _scrollNode.simdPosition = position
     let vertShader = """
       uniform float scroll_offset;
       float d = _geometry.position.x;
