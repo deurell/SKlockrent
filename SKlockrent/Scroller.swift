@@ -16,7 +16,9 @@ class Scroller
   let _scrollNode:SCNNode
   var _scrollOffset:Double = 0
   
-  let _scrollText = "Klockrent tillverkades under tiden Deurell Labs kompilerade C++ kod för andra projekt. Spelet innehåller ingen reklam eller köp och vi kommer aldrig på något sätt spara uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*       "
+  let _scrollText = "Klockrent innehåller ingen reklam eller dolda köp och vi kommer aldrig på något sätt spara/spåra uppgifter om användaren. Ever! Ha en fin dag och ta hand om varandra...       *wrap*       "
+  
+  let wrap_time:Double = 100.0
   
   init(scene: SCNScene, position: simd_float3) {
     _scene = scene
@@ -46,7 +48,7 @@ class Scroller
   
   func update(delta:Double) {
     _scrollOffset += delta
-    if (_scrollOffset >= 109.0) {
+    if (_scrollOffset >= wrap_time) {
       _scrollOffset = 0
     }
     _text.setValue(_scrollOffset, forKey: "scroll_offset")

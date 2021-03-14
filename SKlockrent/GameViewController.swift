@@ -22,7 +22,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
   
   var _scroller:Scroller?
   
-  static let hand_scale:simd_float3 = [0.4,0.4,1.0]
+  let hand_scale:simd_float3 = [0.4,0.4,1.0]
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -61,7 +61,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     _hourNode.geometry = hourPlane
     _hourNode.position = SCNVector3(x:0, y:1.1, z:0.61)
     _hourNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    _hourNode.simdScale = GameViewController.hand_scale
+    _hourNode.simdScale = hand_scale
     hourPlane.firstMaterial?.diffuse.contents = UIImage(named: "hourhand")
     _clockNode?.addChildNode(_hourNode)
     
@@ -70,7 +70,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     _minuteNode.geometry = minutePlane
     _minuteNode.position = SCNVector3(x:0, y:1.1, z:0.6)
     _minuteNode.pivot = SCNMatrix4MakeTranslation(0, -0.7, 0)
-    _minuteNode.simdScale = GameViewController.hand_scale
+    _minuteNode.simdScale = hand_scale
     minutePlane.firstMaterial?.diffuse.contents = UIImage(named: "minutehand")
     _clockNode?.addChildNode(_minuteNode)
     
@@ -106,7 +106,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
           let seq = SCNAction.sequence([scaleUp, scaleUp.reversed()])
           seq.timingMode = .easeInEaseOut
           node.runAction(seq, completionHandler: {
-            node.simdScale = GameViewController.hand_scale
+            node.simdScale = self.hand_scale
           })
         case .changed:
           break
