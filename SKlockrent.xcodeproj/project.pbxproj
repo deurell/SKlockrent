@@ -14,6 +14,9 @@
 		CF58133525FBADDC005B27FF /* frag.shader in Resources */ = {isa = PBXBuildFile; fileRef = CF58133425FBADDC005B27FF /* frag.shader */; };
 		CF58133925FCC72A005B27FF /* Commodore Rounded v1.2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */; };
 		CF58133C25FDE808005B27FF /* Scroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF58133B25FDE808005B27FF /* Scroller.swift */; };
+		CF9AA7E125FF668300DED25F /* GameStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9AA7E025FF668300DED25F /* GameStage.swift */; };
+		CF9AA7E425FF669100DED25F /* MenuStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9AA7E325FF669100DED25F /* MenuStage.swift */; };
+		CF9AA7E725FF66D000DED25F /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9AA7E625FF66D000DED25F /* Renderer.swift */; };
 		CFBDC65925DFD66B00656C0E /* assets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CFBDC65825DFD66B00656C0E /* assets.scnassets */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +30,9 @@
 		CF58133425FBADDC005B27FF /* frag.shader */ = {isa = PBXFileReference; lastKnownFileType = text; path = frag.shader; sourceTree = "<group>"; };
 		CF58133725FCC603005B27FF /* Commodore Rounded v1.2.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Commodore Rounded v1.2.ttf"; sourceTree = "<group>"; };
 		CF58133B25FDE808005B27FF /* Scroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scroller.swift; sourceTree = "<group>"; };
+		CF9AA7E025FF668300DED25F /* GameStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStage.swift; sourceTree = "<group>"; };
+		CF9AA7E325FF669100DED25F /* MenuStage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuStage.swift; sourceTree = "<group>"; };
+		CF9AA7E625FF66D000DED25F /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		CFBDC65825DFD66B00656C0E /* assets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = assets.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,6 +75,9 @@
 				7329E9B225DD2DD100AA2085 /* Assets.xcassets */,
 				7329E9B425DD2DD100AA2085 /* Info.plist */,
 				CFBDC65825DFD66B00656C0E /* assets.scnassets */,
+				CF9AA7E025FF668300DED25F /* GameStage.swift */,
+				CF9AA7E325FF669100DED25F /* MenuStage.swift */,
+				CF9AA7E625FF66D000DED25F /* Renderer.swift */,
 			);
 			path = SKlockrent;
 			sourceTree = "<group>";
@@ -163,7 +172,10 @@
 			files = (
 				CF58133C25FDE808005B27FF /* Scroller.swift in Sources */,
 				7329E9AE25DD2DD000AA2085 /* GameViewController.swift in Sources */,
+				CF9AA7E725FF66D000DED25F /* Renderer.swift in Sources */,
 				7329E9AA25DD2DD000AA2085 /* AppDelegate.swift in Sources */,
+				CF9AA7E425FF669100DED25F /* MenuStage.swift in Sources */,
+				CF9AA7E125FF668300DED25F /* GameStage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
