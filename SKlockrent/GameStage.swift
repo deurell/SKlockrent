@@ -76,7 +76,7 @@ class GameStage : Renderer
     
     _scroller = Scroller(scene: scene,
                          position: [0,-8,-4],
-                         scrollText: "Klockrent innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ")
+                         scrollText: "Klockrent innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ", twist: 0.5)
     if let scroller = _scroller {
       scroller._timeline = [
         SpeedCommand(time: 0.0, scroller: scroller, speed: 75),

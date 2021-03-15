@@ -40,18 +40,19 @@ class MenuStage : Renderer
     ambientLightNode.light!.color = UIColor.darkGray
     scene.rootNode.addChildNode(ambientLightNode)
     
-    _gameOne = createLabel(string: "Lätt", position: [-2,2,0], fromCol: [0, 0.53, 0], toCol: [0.73,0.73,0.73], offset: 0.0)
+    _gameOne = createLabel(string: "Lätt", position: [-2.2,2,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73], offset: 0.0)
     scene.rootNode.addChildNode(_gameOne!)
 
-    _gameTwo = createLabel(string: "Medel", position: [-2.35,0,0], fromCol: [0, 0, 0.66], toCol: [0.73,0.73,0.73], offset: -0.5)
+    _gameTwo = createLabel(string: "Medel", position: [-2.55,0,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73], offset: -1.5)
     scene.rootNode.addChildNode(_gameTwo!)
 
-    _gameThree = createLabel(string: "Svårt", position: [-2.4,-2,0], fromCol: [0.53, 0, 0], toCol: [0.73,0.73,0.73],offset: -1.0)
+    _gameThree = createLabel(string: "Svårt", position: [-2.6,-2,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73],offset: -3.0)
     scene.rootNode.addChildNode(_gameThree!)
 
     _scroller = Scroller(scene: scene,
                          position: [0, 7, -4],
-                         scrollText: "Klockrent   innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ")
+                         scrollText: "Klockrent   innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ",
+                         twist: 1.5)
     if let scroller = _scroller {
       scroller._timeline = [
         SpeedCommand(time: 0.0, scroller: scroller, speed: 75),
@@ -63,7 +64,8 @@ class MenuStage : Renderer
     
     _scroller2 = Scroller(scene: scene,
                          position: [0, -7, -4],
-                         scrollText: "Lätt är hela timmar. Medel tar med halvtimmar och svårt tar även med kvart i/över. Ha det kul, och öva massor!  <3 <3 <3     ")
+                         scrollText: "Lätt är hela timmar. Medel tar med halvtimmar och svårt tar även med kvart i/över. Ha det kul, och öva massor!  <3 <3 <3     ",
+                         twist: 0.5)
     if let scroller = _scroller2 {
       scroller._timeline = [
         SpeedCommand(time: 0.0, scroller: scroller, speed: 0),
@@ -72,7 +74,7 @@ class MenuStage : Renderer
       ]
     }
   
-    _view.backgroundColor = UIColor.init(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+    _view.backgroundColor = UIColor.init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
     
     let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
     _view.addGestureRecognizer(tapRecognizer)
@@ -93,7 +95,7 @@ class MenuStage : Renderer
         #pragma body
         float iTime = scn_frame.time;
         float2 uv = _surface.diffuseTexcoord;
-        _output.color.rgba = float4(mix(from_col,to_col,sin(3.14159265 * uv.y) * (0.5 + abs(sin(iTime+offset)))), 1.0);
+        _output.color.rgba = float4(mix(from_col,to_col,0.5*sin(2.0*iTime + offset)), 1.0);
     """
     text.shaderModifiers = [.fragment: fragShader]
     let from = NSValue(scnVector3: SCNVector3(fromCol))

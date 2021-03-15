@@ -73,7 +73,7 @@ class Scroller
   var _timelineOffset = 0
   var _timeline:[TimelineCommand]?
 
-  init(scene: SCNScene, position: simd_float3, scrollText:String) {
+  init(scene: SCNScene, position: simd_float3, scrollText:String, twist: Float) {
     _scene = scene
     _text = SCNText(string: scrollText, extrusionDepth: 0)
     _text.font = UIFont(name: "Commodore-64-Rounded", size: 7)
@@ -82,20 +82,27 @@ class Scroller
     _scrollNode.simdScale = [0.2,0.2,0.2]
     _scrollNode.simdPosition = position
     let vertShader = """
-      uniform float scroll_offset;
+      #pragma arguments
+      float scroll_offset;
+      float offset
+      #pragma body
+      float iTime = scn_frame.time;
       float d = _geometry.position.x;
-      _geometry.position.y += (8.0 * sin(-4.0 * u_time + 0.08*d));
+      _geometry.position.y += (8.0 * sin(-4.0 * iTime + 0.08*d));
       _geometry.position.x = _geometry.position.x - scroll_offset + 50;
     """
     let fragShader = """
+        #pragma arguments
+        float offset
         #pragma body
         float iTime = scn_frame.time;
-        float3 lb64 = float3(.0, 136.0/255.0, 1.0);
-        float3 b64 = float3(.0, .0, 170.0/255.0);
-        _output.color.rgba = float4(mix(b64,lb64,abs(sin(2.0*iTime))), 1.0);
+        float3 lb64 = float3(.0, .0, .0);
+        float3 b64 = float3(0.73, 0.73, 0.73);
+        _output.color.rgba = float4(mix(lb64,b64,0.5*sin(2.0*iTime+offset)), 1.0);
     """
     _text.shaderModifiers = [.geometry: vertShader ,.fragment: fragShader]
     _text.setValue(0.0, forKey: "scroll_offset")
+    _text.setValue(twist, forKey: "offset")
     scene.rootNode.addChildNode(_scrollNode)
   }
   
