@@ -8,7 +8,7 @@
 import Foundation
 import SceneKit
 
-enum SceneState {case active; case done}
+enum SceneState {case initializing; case active; case done}
 
 protocol Renderer {
   var state:SceneState { get }

@@ -10,7 +10,7 @@ import SceneKit
 
 class MenuStage : Renderer
 {
-  var state: SceneState = .active
+  var state: SceneState = .initializing
   
   var scene: SCNScene
   var _view: SCNView
@@ -48,6 +48,7 @@ class MenuStage : Renderer
     
     let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
     _view.addGestureRecognizer(tapRecognizer)
+    state = .active
   }
   
   @objc

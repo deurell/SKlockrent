@@ -33,13 +33,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     }
     let delta = time - _previousUpdate
     _previousUpdate = time
-    _currentStage?.update(delta: delta)
     
     if (_currentStage?.state == .done) {
+      _currentStage = nil
       DispatchQueue.main.async {
-        self.displayStage(stage: GameStage(view: self._view!))
+        let stage = GameStage(view: self._view!)
+        self.displayStage(stage: stage)
       }
     }
+    _currentStage?.update(delta: delta)
   }
   
   func displayStage(stage: Renderer) {

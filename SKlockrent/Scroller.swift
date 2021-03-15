@@ -117,7 +117,6 @@ class Scroller
         }
       }
     }
-    
     _text.setValue(_scrollOffset, forKey: "scroll_offset")
   }
 }
