@@ -40,19 +40,22 @@ class MenuStage : Renderer
     ambientLightNode.light!.color = UIColor.darkGray
     scene.rootNode.addChildNode(ambientLightNode)
     
-    _gameOne = createLabel(string: "Lätt", position: [-2.2,2,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73], offset: 0.0)
+    let action:SCNAction = SCNAction.wait(duration: 0)
+    
+    _gameOne = createLabel(string: "Lätt", position: [0,2,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73], offset: 0.0, action: action)
     scene.rootNode.addChildNode(_gameOne!)
 
-    _gameTwo = createLabel(string: "Medel", position: [-2.55,0,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73], offset: -1.5)
+    _gameTwo = createLabel(string: "Medel", position: [-0.3,0,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73], offset: -1.5, action: action)
     scene.rootNode.addChildNode(_gameTwo!)
 
-    _gameThree = createLabel(string: "Svårt", position: [-2.6,-2,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73],offset: -3.0)
+    _gameThree = createLabel(string: "Svårt", position: [-0.35,-2,0], fromCol: [0, 0, 0], toCol: [0.73,0.73,0.73],offset: -3.0, action: action)
     scene.rootNode.addChildNode(_gameThree!)
 
     _scroller = Scroller(scene: scene,
                          position: [0, 7, -4],
                          scrollText: "Klockrent   innehåller ingen reklam eller dolda köp och vi kommer aldrig någonsin spara/spåra uppgifter om användaren. Ha en fin dag och ta hand om varandra...       *wrap*       ",
-                         twist: 1.5)
+                         twist: 1.8)
+    
     if let scroller = _scroller {
       scroller._timeline = [
         SpeedCommand(time: 0.0, scroller: scroller, speed: 75),
@@ -81,8 +84,8 @@ class MenuStage : Renderer
     state = .active
   }
   
-  func createLabel(string: String, position: simd_float3, fromCol: simd_float3, toCol: simd_float3, offset: Float) -> SCNNode {
-    let text = SCNText(string: string, extrusionDepth: 0)
+  func createLabel(string: String, position: simd_float3, fromCol: simd_float3, toCol: simd_float3, offset: Float, action: SCNAction) -> SCNNode {
+    let text = SCNText(string: string, extrusionDepth: 1)
     text.firstMaterial?.diffuse.contents = UIColor.init(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
     text.font = UIFont(name: "Commodore-64-Rounded", size: 7)
 
@@ -109,6 +112,8 @@ class MenuStage : Renderer
     textNode.geometry = text
     textNode.simdScale = [0.2,0.2,0.2]
     textNode.simdPosition = position
+    textNode.pivot = SCNMatrix4MakeTranslation(12, 0, 0)
+    textNode.runAction(action)
     return textNode
   }
   
